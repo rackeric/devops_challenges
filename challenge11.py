@@ -29,6 +29,7 @@ dns = pyrax.cloud_dns
 ubu_image = "5cebb13a-f783-4f8c-8058-c4182c724ccd"
 flavor_512 = 2
 
+print "\n"
 print "-Creating CS server and CNW network.\n"
 # create isolated network
 my_network = cnw.create("challenge11_net", cidr="192.168.200.0/24")
@@ -39,7 +40,7 @@ networks_list = my_network.get_server_networks(public=True, private=True)
 server1 = cs.servers.create("server1", ubu_image, flavor_512, networks=networks_list)
 server2 = cs.servers.create("server2", ubu_image, flavor_512, networks=networks_list)
 server3 = cs.servers.create("server3", ubu_image, flavor_512, networks=networks_list)
-print "-Cloud Servers and isolated Cloud Network created.\n"
+print "-Cloud Servers and isolated Cloud Network created. 192.168.200.0/24\n"
 # print server info
 print "Server uuid: ", server1.id
 print "Admin password: ", server1.adminPass
@@ -102,9 +103,9 @@ print "-Waiting for CBS volumes activation.\n"
 time.sleep(120)
 # attach CBS volumes to servers
 mountpoint = "/dev/xvdb"
-#vol1.attach_to_instance(server1, mountpoint=mountpoint)
-#vol2.attach_to_instance(server2, mountpoint=mountpoint)
-#vol3.attach_to_instance(server3, mountpoint=mountpoint)
+vol1.attach_to_instance(server1, mountpoint=mountpoint)
+vol2.attach_to_instance(server2, mountpoint=mountpoint)
+vol3.attach_to_instance(server3, mountpoint=mountpoint)
 print "-CBS volumes now attached.\n"
 
 # list networks
