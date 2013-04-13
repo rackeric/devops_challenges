@@ -27,13 +27,7 @@ for i in range(1, 4):
 	#name = 'web' + str(i)
 	#print name
 	server = cs.servers.create('web' + str(i), ubu_image, flavor_512)
-	pyrax.utils.wait_until(server,
-			att = "status", \
-			desired = "ACTIVE", \
-			callback = None, \
-			interval = 15, \
-			attempts = 25, \
-			verbose = True, \
-			verbose_atts = None)
+	while not (server.networks):
+		server = cs.servers.get(server.id)
 	print "Admin password:", server.adminPass
 	print "Networks:", server.networks	
