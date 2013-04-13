@@ -1,4 +1,4 @@
-#/usr/bin/python
+#!/usr/bin/python
 #
 # Challenge 11
 #
@@ -28,12 +28,6 @@ dns = pyrax.cloud_dns
 
 ubu_image = "5cebb13a-f783-4f8c-8058-c4182c724ccd"
 flavor_512 = 2
-# get ubuntu image name
-#ubu_image = [img for img in cs.images.list()
-#        if "Ubuntu 12.04" in img.name][0]
-# get 512 flavor name
-#flavor_512 = [flavor for flavor in cs.flavors.list()
-#        if flavor.ram == 512][0]
 
 print "-Creating CS server and CNW network.\n"
 # create isolated network
@@ -108,9 +102,9 @@ print "-Waiting for CBS volumes activation.\n"
 time.sleep(120)
 # attach CBS volumes to servers
 mountpoint = "/dev/xvdb"
-vol1.attach_to_instance(server1, mountpoint=mountpoint)
-vol2.attach_to_instance(server2, mountpoint=mountpoint)
-vol3.attach_to_instance(server3, mountpoint=mountpoint)
+#vol1.attach_to_instance(server1, mountpoint=mountpoint)
+#vol2.attach_to_instance(server2, mountpoint=mountpoint)
+#vol3.attach_to_instance(server3, mountpoint=mountpoint)
 print "-CBS volumes now attached.\n"
 
 # list networks
@@ -124,11 +118,11 @@ dom = dns.create(name="empnew.com", emailAddress="admin@empnew.com")
 recs = [{
         "type": "A",
         "name": "empnew.com",
-        "data": vip,
+        "data": lb.virtual_ips[0].address,
         }, {
         "type": "A",
         "name": "www.empnew.com",
-        "data": vip,
+        "data": lb.virtual_ips[0].address,
         }]
 
 dom.add_records(recs)
