@@ -10,8 +10,8 @@
 import pyrax
 import time
 
-username = "utcodemonkey"
-API_key = "25136ca5cbe07aa925da1ee2f232aa5a"
+username = ""
+API_key = ""
 
 pyrax.set_credentials(username, API_key)
 
