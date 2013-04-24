@@ -8,12 +8,10 @@
 # Use any image you want. Worth 1 point
 #
 import pyrax
-import time
+import os
 
-username = "utcodemonkey"
-API_key = "25136ca5cbe07aa925da1ee2f232aa5a"
-
-pyrax.set_credentials(username, API_key)
+cred = os.path.join(os.path.expanduser('~'), ".rackspace_cloud_credentials")
+pyrax.set_credential_file(cred)
 
 # create objects
 cs  = pyrax.cloudservers
@@ -24,10 +22,8 @@ flavor_512 = 2
 
 # server creation loop
 for i in range(1, 4):
-	#name = 'web' + str(i)
-	#print name
 	server = cs.servers.create('web' + str(i), ubu_image, flavor_512)
+	print "Admin password:", server.adminPass
 	while not (server.networks):
 		server = cs.servers.get(server.id)
-	print "Admin password:", server.adminPass
 	print "Networks:", server.networks	
