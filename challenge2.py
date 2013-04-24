@@ -5,18 +5,31 @@
 # Worth 2 Point
 #
 import pyrax
+import os
 import time
 
-username = "utcodemonkey"
-API_key = "25136ca5cbe07aa925da1ee2f232aa5a"
+# auth
+cred = os.path.join(os.path.expanduser('~'), ".rackspace_cloud_credentials")
+pyrax.set_credential_file(cred)
 
-pyrax.set_credentials(username, API_key)
-
+# define image and flavor
 flavor_512 = 2
-id_of_server = "9d4b35ac-d91d-48da-8c32-1d8c6744fa7b"
+id_of_server = "a997bb89-c33a-4571-81a9-8f676258941a"
 
 cs = pyrax.cloudservers
 
 server = cs.servers.get(id_of_server)
-new_img = server.create_image("challenge2")
-newserver = cs.servers.create("challenge2", new_img, flavor_512)
+new_img = server.create_image("deleteme2")
+
+print new_img
+print "-Waiting for image creation."
+time.wait(360)
+
+# create server based on new image
+newserver = cs.servers.create("challenge2_server", new_img, flavor_512)
+
+# server info print out
+print "Admin password:", server.adminPass
+while not (server.networks):
+	server = cs.servers.get(server.id)
+print "Networks:", server.networks
