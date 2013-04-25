@@ -12,18 +12,30 @@ import time
 cred = os.path.join(os.path.expanduser('~'), ".rackspace_cloud_credentials")
 pyrax.set_credential_file(cred)
 
+cs = pyrax.cloudservers
+
 # define image and flavor
 flavor_512 = 2
 id_of_server = "a997bb89-c33a-4571-81a9-8f676258941a"
+#id_of_server = [img for img in cs.images.list()
+#        if "Ubuntu4nova" in img.name][0]
 
-cs = pyrax.cloudservers
 
+print "1"
 server = cs.servers.get(id_of_server)
-new_img = server.create_image("deleteme2")
-
+print "2"
+new_img = server.create_image("deleteme7")
+print "3"
 print new_img
 print "-Waiting for image creation."
-time.wait(360)
+pyrax.utils.wait_until(new_img,
+			att = "status", \
+			desired = "available", \
+			callback = None, \
+			interval = 30, \
+			attempts = 25, \
+			verbose = True, \
+			verbose_atts = None)
 
 # create server based on new image
 newserver = cs.servers.create("challenge2_server", new_img, flavor_512)
